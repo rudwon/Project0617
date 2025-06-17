@@ -33,7 +33,7 @@ def load_data():
     return pd.json_normalize(data['elements'])
 
 data = load_data()
-data = data[data['number'] <= 20]  # 20번까지 필터링
+data = data[data['number'] <= 20]  # 20번까지만 필터링
 
 # 한글 이름 매핑
 korean_names = {
@@ -68,10 +68,4 @@ for period in range(1, 4):
         match = data[(data['xpos'] == group) & (data['ypos'] == period)]
         if not match.empty:
             el = match.iloc[0]
-            color = category_colors.get(el['category'], '#95a5a6')
-            btn_style = f"background-color:{color};"
-            if cols[group - 1].button(el['symbol'], key=el['symbol']):
-                st.session_state.selected_element = el['symbol']
-            cols[group - 1].markdown(f"""
-                <div style='{btn_style} border-radius:6px; padding:4px; text-align:center; font-size:10px; color:white;'>
-                    {el[
+            color = category_colors.get(el['categor
