@@ -36,14 +36,14 @@ def load_data():
     return pd.json_normalize(data['elements'])
 
 data = load_data()
-data = data[data['number'] <= 20]  # 20번까지만 표시
 
-# 한글 이름 매핑
+# 한글 이름 예시 (전체 원소가 아니라 일부만 포함)
 korean_names = {
     'H': '수소', 'He': '헬륨', 'Li': '리튬', 'Be': '베릴륨', 'B': '붕소',
     'C': '탄소', 'N': '질소', 'O': '산소', 'F': '플루오린', 'Ne': '네온',
     'Na': '나트륨', 'Mg': '마그네슘', 'Al': '알루미늄', 'Si': '규소', 'P': '인',
     'S': '황', 'Cl': '염소', 'Ar': '아르곤', 'K': '칼륨', 'Ca': '칼슘'
+    # 필요시 전체 원소 한글명을 추가하세요
 }
 
 # 색상 설정
@@ -67,7 +67,7 @@ if 'selected_element' not in st.session_state:
 st.subheader("🧪 주기율표")
 
 # 주기율표 레이아웃
-for period in range(1, 4):
+for period in range(1, 10):
     cols = st.columns(18)
     for group in range(1, 19):
         match = data[(data['xpos'] == group) & (data['ypos'] == period)]
