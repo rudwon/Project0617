@@ -33,6 +33,15 @@ def load_data():
     return pd.json_normalize(data['elements'])
 
 data = load_data()
+data = data[data['number'] <= 20]  # 20번까지 필터링
+
+# 한글 이름 매핑
+korean_names = {
+    'H': '수소', 'He': '헬륨', 'Li': '리튬', 'Be': '베릴륨', 'B': '붕소',
+    'C': '탄소', 'N': '질소', 'O': '산소', 'F': '플루오린', 'Ne': '네온',
+    'Na': '나트륨', 'Mg': '마그네슘', 'Al': '알루미늄', 'Si': '규소', 'P': '인',
+    'S': '황', 'Cl': '염소', 'Ar': '아르곤', 'K': '칼륨', 'Ca': '칼슘'
+}
 
 category_colors = {
     'alkali metal': '#e74c3c',
@@ -53,7 +62,7 @@ if 'selected_element' not in st.session_state:
 
 st.subheader("🧪 주기율표")
 
-for period in range(1, 8):
+for period in range(1, 4):
     cols = st.columns(18)
     for group in range(1, 19):
         match = data[(data['xpos'] == group) & (data['ypos'] == period)]
@@ -65,29 +74,4 @@ for period in range(1, 8):
                 st.session_state.selected_element = el['symbol']
             cols[group - 1].markdown(f"""
                 <div style='{btn_style} border-radius:6px; padding:4px; text-align:center; font-size:10px; color:white;'>
-                    {el['number']}
-                </div>""", unsafe_allow_html=True)
-        else:
-            cols[group - 1].write(" ")
-
-if st.session_state.selected_element:
-    el = data[data['symbol'] == st.session_state.selected_element].iloc[0]
-    st.markdown("""
-        <div class="info-box">
-            <h2>{name} ({symbol})</h2>
-            <p><strong>원자번호:</strong> {number}</p>
-            <p><strong>원자 질량:</strong> {atomic_mass}</p>
-            <p><strong>카테고리:</strong> {category}</p>
-            <p><strong>전자배열:</strong> {electron_configuration}</p>
-            <p><strong>요약:</strong> {summary}</p>
-        </div>
-    """.format(
-        name=el['name'],
-        symbol=el['symbol'],
-        number=el['number'],
-        atomic_mass=el['atomic_mass'],
-        category=el['category'],
-        electron_configuration=el['electron_configuration'],
-        summary=el['summary']), unsafe_allow_html=True)
-else:
-    st.info("원소를 클릭하면 상세 정보를 확인할 수 있습니다 🔎")
+                    {el[
